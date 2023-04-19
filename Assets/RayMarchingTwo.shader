@@ -32,6 +32,7 @@ Shader "Hidden/RayMarchingTwo"
 			uniform fixed4 _mainColor;
 			uniform float2 _ShadowDistance;
 			uniform float _ShadowIntensity;
+			uniform float _ShadowPenumbra;
 
 			struct appdata
 			{
@@ -103,12 +104,27 @@ Shader "Hidden/RayMarchingTwo"
 			}
 
 
+			float softShadow(float3 ro, float3 rd, float minT, float maxT, float k)
+			{
+				float result = 1.0;
+				for (float t = minT; t < maxT;) {
+					float h = distanceField(ro + rd * t);
+					if (h < 0.001) {
+						return 0.0;
+					}
+					result = min(result, k * h / t);
+					t += h;
+				}
+				return result;
+			}
+
+
 			float3 Shading(float3 p, float3 n) 
 			{
 				//Directional Light
 				float result = (_LightCol * dot(-_LightDir, n) * 0.5 + 0.5) * _LightIntensity;
 				//Shadows
-				float shadow = hardShadow(p, -_LightDir, _ShadowDistance.x, _ShadowDistance.y) * 0.5 + 0.5;
+				float shadow = softShadow(p, -_LightDir, _ShadowDistance.x, _ShadowDistance.y, _ShadowPenumbra) * 0.5 + 0.5;
 				shadow = max(0.0,pow(shadow, _ShadowIntensity));
 				result *= shadow;
 

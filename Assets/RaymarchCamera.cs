@@ -41,8 +41,11 @@ public class RaymarchCamera : SceneViewFilter
     public float _LightIntensity;
 
     [Header("Shadow")]
+    [Range(0, 4)]
     public float _ShadowIntensity;
     public Vector2 _ShadowDistance;
+    [Range(1,128)]
+    public float _ShadowPenumbra;
 
     [Header("Signed Distance Field")]
     public Color _mainColor;
@@ -71,6 +74,7 @@ public class RaymarchCamera : SceneViewFilter
         _raymarchMat.SetFloat("_LightIntensity", _LightIntensity);
         _raymarchMat.SetFloat("_ShadowIntensity", _ShadowIntensity);
         _raymarchMat.SetVector("_ShadowDistance", _ShadowDistance);
+        _raymarchMat.SetFloat("_ShadowPenumbra", _ShadowPenumbra);
         _raymarchMaterial.SetMatrix("_CamFrustum", CamFrustum(_camera));
         _raymarchMaterial.SetMatrix("_CamToWorld", _camera.cameraToWorldMatrix);
         _raymarchMat.SetFloat("_maxDistance", _maxDistance);
