@@ -23,12 +23,15 @@ Shader "Hidden/RayMarchingTwo"
 			uniform sampler2D _CameraDepthTexture;
 			uniform float4x4 _CamFrustum, _CamToWorld;
 			uniform float _maxSteps;
-			uniform float _maxDistance;
-			uniform float4 _sphere1, _box1;
+			uniform float _maxDistance, _box1round, _boxSphereSmooth, _sphereIntersectSmooth;
+			uniform float4 _sphere1, _sphere2, _box1;
 			uniform int _useModInterval;
 			uniform float3 _modInterval;
-			uniform float3 _LightDir;
+			uniform float3 _LightDir, _LightCol;
+			uniform float _LightIntensity;
 			uniform fixed4 _mainColor;
+			uniform float2 _ShadowDistance;
+			uniform float _ShadowIntensity;
 
 			struct appdata
 			{
@@ -58,16 +61,24 @@ Shader "Hidden/RayMarchingTwo"
 				return o;
 			}
 
+			float BoxSphere(float3 p) {
+				float Sphere1 = sdSphere(p - _sphere1.xyz, _sphere1.w);
+				float Box1 = sdRoundBox(p - _box1.xyz, _box1.www, _box1round);
+				float combine1 = opSS(Sphere1, Box1, _boxSphereSmooth);
+				float Sphere2 = sdSphere(p - _sphere2.xyz, _sphere2.w);
+				float combine2 = opIS(Sphere2, combine1, _sphereIntersectSmooth);
+				return combine2;
+			}
+
 			float distanceField(float3 p) {
 				if (_useModInterval) {
 					float modX = pMod1(p.x, _modInterval.x);
 					float modY = pMod1(p.y, _modInterval.y);
 					float modZ = pMod1(p.z, _modInterval.z);
 				}
-				float Sphere1 = sdSphere(p - _sphere1.xyz, _sphere1.w);
-				float Box1 = sdBox(p - _box1.xyz, _box1.www);
-
-				return opS(Sphere1, Box1);
+				float ground = sdPlane(p, float4(0, 1, 0, 0));
+				float boxSphere1 = BoxSphere(p);
+				return opU(ground, boxSphere1);
 			}
 
 			float3 getNormal(float3 p) {
@@ -77,6 +88,32 @@ Shader "Hidden/RayMarchingTwo"
 					distanceField(p + offset.yxy) - distanceField(p - offset.yxy),
 					distanceField(p + offset.yyx) - distanceField(p - offset.yyx));
 				return normalize(n);
+			}
+
+			float hardShadow(float3 ro, float3 rd, float minT, float maxT) 
+			{
+				for (float t = minT; t < maxT;) {
+					float h = distanceField(ro + rd * t);
+					if (h < 0.001) {
+						return 0.0;
+					}
+					t += h;
+				}
+				return 1.0;
+			}
+
+
+			float3 Shading(float3 p, float3 n) 
+			{
+				//Directional Light
+				float result = (_LightCol * dot(-_LightDir, n) * 0.5 + 0.5) * _LightIntensity;
+				//Shadows
+				float shadow = hardShadow(p, -_LightDir, _ShadowDistance.x, _ShadowDistance.y) * 0.5 + 0.5;
+				shadow = max(0.0,pow(shadow, _ShadowIntensity));
+				result *= shadow;
+
+				return result;
+
 			}
 
 			fixed4 raymarching(float3 ro, float3 rd, float depth)
@@ -98,9 +135,8 @@ Shader "Hidden/RayMarchingTwo"
 					if (d < 0.01) {//We have hit something
 						//shading
 						float3 n = getNormal(p);
-						float light = dot(-_LightDir, n);
-
-						result = fixed4(_mainColor.rgb * light,1);
+						float3 s = Shading(p, n);
+						result = fixed4(_mainColor.rgb * s,1);
 						break;
 					}
 					t += d;

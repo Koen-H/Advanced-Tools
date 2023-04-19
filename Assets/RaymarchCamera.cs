@@ -32,13 +32,28 @@ public class RaymarchCamera : SceneViewFilter
         }
     }
     private Camera _cam;
-
-    public Transform _directionalLight;
-
-    public float _maxSteps;
     public float _maxDistance;
+    public float _maxSteps;
+
+    [Header("Directional Light")]
+    public Transform _directionalLight;
+    public Color _LightCol;
+    public float _LightIntensity;
+
+    [Header("Shadow")]
+    public float _ShadowIntensity;
+    public Vector2 _ShadowDistance;
+
+    [Header("Signed Distance Field")]
     public Color _mainColor;
-    public Vector4 _sphere1, _box1;
+    public Vector4 _sphere1;
+    public Vector4 _box1;
+    public float _box1round;
+    public float _boxSphereSmooth;
+    public Vector4 _sphere2;
+    public float _sphereIntersectSmooth;
+
+    [Header("Mod Interval")]
     public bool _useModInterval;
     public Vector3 _modInterval;
 
@@ -52,12 +67,20 @@ public class RaymarchCamera : SceneViewFilter
         }
 
         _raymarchMat.SetVector("_LightDir", _directionalLight ? _directionalLight.forward : Vector3.down);
+        _raymarchMat.SetColor("_LightCol", _LightCol);
+        _raymarchMat.SetFloat("_LightIntensity", _LightIntensity);
+        _raymarchMat.SetFloat("_ShadowIntensity", _ShadowIntensity);
+        _raymarchMat.SetVector("_ShadowDistance", _ShadowDistance);
         _raymarchMaterial.SetMatrix("_CamFrustum", CamFrustum(_camera));
         _raymarchMaterial.SetMatrix("_CamToWorld", _camera.cameraToWorldMatrix);
         _raymarchMat.SetFloat("_maxDistance", _maxDistance);
         _raymarchMat.SetFloat("_maxSteps", _maxSteps);
         _raymarchMat.SetVector("_sphere1", _sphere1);
         _raymarchMaterial.SetVector("_box1", _box1);
+        _raymarchMat.SetFloat("_box1round", _box1round);
+        _raymarchMat.SetFloat("_boxSphereSmooth", _boxSphereSmooth);
+        _raymarchMat.SetVector("_sphere2", _sphere2);
+        _raymarchMat.SetFloat("_sphereIntersectSmooth", _sphereIntersectSmooth);
         _raymarchMaterial.SetColor("_mainColor", _mainColor);
         _raymarchMaterial.SetInt("_useModInterval", _useModInterval ? 1 : 0);
         _raymarchMaterial.SetVector("_modInterval", _modInterval);

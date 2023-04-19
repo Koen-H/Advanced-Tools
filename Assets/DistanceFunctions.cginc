@@ -22,6 +22,14 @@ float sdBox(float3 p, float3 b)
 		length(max(d, 0.0));
 }
 
+// Rounded Box
+float sdRoundBox(float3 p, float3 b, float r) {
+	float3 q = abs(p) - b;
+	return min(max(q.x, max(q.y, q.z)), 0.0) + length(max(q, 0.0)) - r;
+}
+
+
+
 // BOOLEAN OPERATORS //
 
 // Union
@@ -41,6 +49,26 @@ float opI(float d1, float d2)
 {
 	return max(d1, d2);
 }
+
+// SMOOTH BOOLEAN OPERATORS
+
+float opUS(float d1, float d2, float k) {
+	float h = clamp(0.5 + 0.5 * (d2 - d1) / k, 0.0, 1.0);
+	return lerp(d2, d1, h) - k * h * (1.0 - h);
+}
+
+float opSS(float d1, float d2, float k) {
+	float h = clamp(0.5 - 0.5 * (d2 + d1) / k, 0.0, 1.0);
+	return lerp(d2, -d1, h) + k * h * (1.0 - h);
+}
+
+float opIS(float d1, float d2, float k) {
+	float h = clamp(0.5 - 0.5 * (d2 - d1) / k, 0.0, 1.0);
+	return lerp(d2, d1, h) + k * h * (1.0 - h);
+}
+
+
+
 
 // Mod Position Axis
 float pMod1 (inout float p, float size)
