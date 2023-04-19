@@ -22,7 +22,8 @@ Shader "Hidden/RayMarchingTwo"
 			sampler2D _MainTex;
 			uniform sampler2D _CameraDepthTexture;
 			uniform float4x4 _CamFrustum, _CamToWorld;
-			uniform float _maxSteps;
+			uniform float _MaxIterations;
+			uniform float _Accuracy;
 			uniform float _maxDistance, _box1round, _boxSphereSmooth, _sphereIntersectSmooth;
 			uniform float4 _sphere1, _sphere2, _box1;
 			uniform int _useModInterval;
@@ -118,15 +119,37 @@ Shader "Hidden/RayMarchingTwo"
 				return result;
 			}
 
+			uniform float _AoStepsize, _AoIntensity;
+			uniform int _AoIterations;
+
+			float AmbientOcclusion(float3 p, float3 n) {
+
+				float step = _AoStepsize;
+				float ao = 0.0;
+				float dist;
+				for (int i = 1; i <= _AoIterations; i++) {
+					dist = step * i;
+					ao += max(0.0,(dist - distanceField(p + n * dist)) / dist);
+				}
+				return (1.0 - ao * _AoIntensity);
+			}
+
 
 			float3 Shading(float3 p, float3 n) 
 			{
+				float3 result;
+				//Diffuse Color
+				float3 color = _mainColor.rgb;
 				//Directional Light
-				float result = (_LightCol * dot(-_LightDir, n) * 0.5 + 0.5) * _LightIntensity;
+				float3 light = (_LightCol * dot(-_LightDir, n) * 0.5 + 0.5) * _LightIntensity;
 				//Shadows
 				float shadow = softShadow(p, -_LightDir, _ShadowDistance.x, _ShadowDistance.y, _ShadowPenumbra) * 0.5 + 0.5;
 				shadow = max(0.0,pow(shadow, _ShadowIntensity));
-				result *= shadow;
+				//Ambient occlusion
+				float ao = AmbientOcclusion(p,n);
+
+
+				result = color * light * shadow * ao;
 
 				return result;
 
@@ -135,7 +158,7 @@ Shader "Hidden/RayMarchingTwo"
 			fixed4 raymarching(float3 ro, float3 rd, float depth)
 			{
 				fixed4 result = fixed4(1, 1, 1, 1);
-				const int max_iteration = _maxSteps;
+				const int max_iteration = _MaxIterations;
 				float t = 0;//Distance travelled along the ray direction
 
 				for (int i = 0; i < max_iteration; i++) {
@@ -148,11 +171,11 @@ Shader "Hidden/RayMarchingTwo"
 					float3 p = ro + rd * t;
 					//check for hit in distancefield
 					float d = distanceField(p);
-					if (d < 0.01) {//We have hit something
+					if (d < _Accuracy) {//We have hit something
 						//shading
 						float3 n = getNormal(p);
 						float3 s = Shading(p, n);
-						result = fixed4(_mainColor.rgb * s,1);
+						result = fixed4(s,1);
 						break;
 					}
 					t += d;
