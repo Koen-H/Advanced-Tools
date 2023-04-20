@@ -1,4 +1,8 @@
-﻿// Sphere
+﻿//For signedDistance functions, I used this as my source:
+// https://iquilezles.org/articles/distfunctions/
+
+
+// Sphere
 // s: radius
 float sdSphere(float3 p, float s)
 {
@@ -26,6 +30,18 @@ float sdBox(float3 p, float3 b)
 float sdRoundBox(float3 p, float3 b, float r) {
 	float3 q = abs(p) - b;
 	return min(max(q.x, max(q.y, q.z)), 0.0) + length(max(q, 0.0)) - r;
+}
+
+// Hexagonal Prism - exact
+float sdHexPrism(float3 p, float2 h)
+{
+	const float3 k = float3(-0.8660254, 0.5, 0.57735);
+	p = abs(p);
+	p.xy -= 2.0 * min(dot(k.xy, p.xy), 0.0) * k.xy;
+	float2 d = float2(
+		length(p.xy - float2(clamp(p.x, -k.z * h.x, k.z * h.x), h.x)) * sign(p.y - h.x),
+		p.z - h.y);
+	return min(max(d.x, d.y), 0.0) + length(max(d, 0.0));
 }
 
 

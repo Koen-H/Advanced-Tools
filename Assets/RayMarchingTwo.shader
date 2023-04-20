@@ -20,20 +20,38 @@ Shader "Hidden/RayMarchingTwo"
 			#include "Distancefunctions.cginc"
 
 			sampler2D _MainTex;
+			
+			//Setup
 			uniform sampler2D _CameraDepthTexture;
 			uniform float4x4 _CamFrustum, _CamToWorld;
+			uniform float _maxDistance;
 			uniform float _MaxIterations;
 			uniform float _Accuracy;
-			uniform float _maxDistance, _box1round, _boxSphereSmooth, _sphereIntersectSmooth;
-			uniform float4 _sphere1, _sphere2, _box1;
+
+			//uniform float _maxDistance, _box1round, _boxSphereSmooth, _sphereIntersectSmooth;
+			//uniform float4 _sphere1, _sphere2, _box1;
+			//Mod interval
 			uniform int _useModInterval;
 			uniform float3 _modInterval;
+
+			//Light
 			uniform float3 _LightDir, _LightCol;
 			uniform float _LightIntensity;
+			
+			//Color
 			uniform fixed4 _mainColor;
+			
+			//Shadow
 			uniform float2 _ShadowDistance;
 			uniform float _ShadowIntensity;
 			uniform float _ShadowPenumbra;
+			
+			//SDf
+			uniform float4 _sphere;
+			uniform float _sphereSmooth;
+			uniform float _degreeRotate;
+
+
 
 			struct appdata
 			{
@@ -63,13 +81,20 @@ Shader "Hidden/RayMarchingTwo"
 				return o;
 			}
 
-			float BoxSphere(float3 p) {
-				float Sphere1 = sdSphere(p - _sphere1.xyz, _sphere1.w);
-				float Box1 = sdRoundBox(p - _box1.xyz, _box1.www, _box1round);
-				float combine1 = opSS(Sphere1, Box1, _boxSphereSmooth);
-				float Sphere2 = sdSphere(p - _sphere2.xyz, _sphere2.w);
-				float combine2 = opIS(Sphere2, combine1, _sphereIntersectSmooth);
-				return combine2;
+			//float BoxSphere(float3 p) {
+			//	float Sphere1 = sdSphere(p - _sphere1.xyz, _sphere1.w);
+			//	float Box1 = sdRoundBox(p - _box1.xyz, _box1.www, _box1round);
+			//	float combine1 = opSS(Sphere1, Box1, _boxSphereSmooth);
+			//	float Sphere2 = sdSphere(p - _sphere2.xyz, _sphere2.w);
+			//	float combine2 = opIS(Sphere2, combine1, _sphereIntersectSmooth);
+			//	return combine2;
+			//}
+
+			float3 RotateY(float3 v, float degree) {
+				float rad = 0.0174532925 * degree;
+				float cosY = cos(rad);
+				float sinY = sin(rad);
+				return float3(cosY * v.x - sinY * v.z, v.y, sinY * v.x + cosY * v.z);
 			}
 
 			float distanceField(float3 p) {
@@ -79,8 +104,16 @@ Shader "Hidden/RayMarchingTwo"
 					float modZ = pMod1(p.z, _modInterval.z);
 				}
 				float ground = sdPlane(p, float4(0, 1, 0, 0));
-				float boxSphere1 = BoxSphere(p);
-				return opU(ground, boxSphere1);
+				float sphere = sdSphere(p - _sphere.xyz ,_sphere.w);
+
+				for (int i = 1; i < 8; i++) {
+					float sphereAdd = sdSphere(RotateY(p, _degreeRotate * i) - _sphere.xyz, _sphere.w);
+					sphere = opUS(sphere, sphereAdd, _sphereSmooth);
+				}
+				return opU(sphere, ground);
+
+				//float boxSphere1 = BoxSphere(p);
+				//return opU(ground, boxSphere1);
 			}
 
 			float3 getNormal(float3 p) {

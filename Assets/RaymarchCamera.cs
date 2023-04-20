@@ -57,19 +57,23 @@ public class RaymarchCamera : SceneViewFilter
     [Range(0,1)]
     public float _AoIntensity;
 
-
-    [Header("Signed Distance Field")]
-    public Color _mainColor;
-    public Vector4 _sphere1;
-    public Vector4 _box1;
-    public float _box1round;
-    public float _boxSphereSmooth;
-    public Vector4 _sphere2;
-    public float _sphereIntersectSmooth;
-
     [Header("Mod Interval")]
     public bool _useModInterval;
     public Vector3 _modInterval;
+
+    [Header("Signed Distance Field")]
+    //public Color _mainColor;
+    //public Vector4 _sphere1;
+    //public Vector4 _box1;
+    //public float _box1round;
+    //public float _boxSphereSmooth;
+    //public Vector4 _sphere2;
+    //public float _sphereIntersectSmooth;
+    public Color _mainColor;
+    public Vector4 _sphere;
+    public float _sphereSmooth;
+    public float _degreeRotate;
+
 
 
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
@@ -91,12 +95,18 @@ public class RaymarchCamera : SceneViewFilter
         _raymarchMat.SetFloat("_maxDistance", _maxDistance);
         _raymarchMat.SetInt("_MaxIterations", _MaxIterations);
         _raymarchMat.SetFloat("_Accuracy", _Accuracy);
-        _raymarchMat.SetVector("_sphere1", _sphere1);
-        _raymarchMaterial.SetVector("_box1", _box1);
-        _raymarchMat.SetFloat("_box1round", _box1round);
-        _raymarchMat.SetFloat("_boxSphereSmooth", _boxSphereSmooth);
-        _raymarchMat.SetVector("_sphere2", _sphere2);
-        _raymarchMat.SetFloat("_sphereIntersectSmooth", _sphereIntersectSmooth);
+        //_raymarchMat.SetVector("_sphere1", _sphere1);
+        //_raymarchMaterial.SetVector("_box1", _box1);
+        //_raymarchMat.SetFloat("_box1round", _box1round);
+        //_raymarchMat.SetFloat("_boxSphereSmooth", _boxSphereSmooth);
+        //_raymarchMat.SetVector("_sphere2", _sphere2);
+        //_raymarchMat.SetFloat("_sphereIntersectSmooth", _sphereIntersectSmooth);
+
+        _raymarchMaterial.SetVector("_sphere",_sphere);
+        _raymarchMat.SetFloat("_sphereSmooth", _sphereSmooth);
+        _raymarchMat.SetFloat("_degreeRotate", _degreeRotate);
+
+
         _raymarchMaterial.SetColor("_mainColor", _mainColor);
         _raymarchMaterial.SetInt("_useModInterval", _useModInterval ? 1 : 0);
         _raymarchMaterial.SetVector("_modInterval", _modInterval);
