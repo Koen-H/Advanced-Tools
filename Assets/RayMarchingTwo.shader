@@ -97,6 +97,10 @@ Shader "Hidden/RayMarchingTwo"
 				return float3(cosY * v.x - sinY * v.z, v.y, sinY * v.x + cosY * v.z);
 			}
 
+			
+
+
+
 			float distanceField(float3 p) {
 				if (_useModInterval) {
 					float modX = pMod1(p.x, _modInterval.x);
@@ -110,8 +114,8 @@ Shader "Hidden/RayMarchingTwo"
 					float sphereAdd = sdSphere(RotateY(p, _degreeRotate * i) - _sphere.xyz, _sphere.w);
 					sphere = opUS(sphere, sphereAdd, _sphereSmooth);
 				}
-				return opU(sphere, ground);
-
+				return opU(ground, sphere);
+				//return mandelbulbSDF(p,3,30);
 				//float boxSphere1 = BoxSphere(p);
 				//return opU(ground, boxSphere1);
 			}

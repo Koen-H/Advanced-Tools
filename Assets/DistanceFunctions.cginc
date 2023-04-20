@@ -95,3 +95,25 @@ float pMod1 (inout float p, float size)
 	p = fmod(-p+halfsize,size)-halfsize;
 	return c;
 }
+
+
+//Mandelbulb RUN WITHOUT SHADING
+float mandelbulbSDF(float3 p, float power, int iterations)
+{
+	float3 z = p;
+	float dr = 1.0;
+	float r = 0.0;
+	for (int i = 0; i < iterations; i++) {
+		r = length(z);
+		if (r > 2.0) break;
+		float theta = acos(z.z / r);
+		float phi = atan2(z.y, z.x);
+		dr = pow(r, power - 1.0) * power * dr + 1.0;
+		float zr = pow(r, power);
+		theta = theta * power;
+		phi = phi * power;
+		z = zr * float3(sin(theta) * cos(phi), sin(phi) * sin(theta), cos(theta));
+		z += p;
+	}
+	return 0.5 * log(r) * r / dr;
+}

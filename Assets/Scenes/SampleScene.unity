@@ -719,7 +719,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482212321}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 69.7, y: 0, z: 0}
+  m_LocalPosition: {x: 0.1, y: 0.08, z: 0}
   m_LocalScale: {x: 775.1351, y: 337.31845, z: 11.84212}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -910,7 +910,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
   m_LocalRotation: {x: 0.40185067, y: 0.7539126, z: -0.49963814, w: 0.14315598}
-  m_LocalPosition: {x: -3.132, y: 3, z: 3.83}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1168,14 +1168,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.17237647, y: -0, z: -0, w: 0.9850312}
-  m_LocalPosition: {x: -0.0000001244014, y: 8.05, z: -12.12}
+  m_LocalRotation: {x: 0.12821975, y: -0, z: -0, w: 0.99174577}
+  m_LocalPosition: {x: 0, y: 0.567, z: -3.201}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 19.852, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 14.733, y: 0, z: 0}
 --- !u!114 &963194229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1189,23 +1189,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shader: {fileID: 4800000, guid: 683c9bd859b94904dafbb9ba57d66a7a, type: 3}
-  _maxDistance: 597.74
-  _MaxIterations: 500
+  _maxDistance: 1000
+  _MaxIterations: 1000
   _Accuracy: 0.001
   _directionalLight: {fileID: 705507995}
   _LightCol: {r: 1, g: 0.98431504, b: 0, a: 0}
   _LightIntensity: 1
-  _ShadowIntensity: 4
+  _ShadowIntensity: 0.92
   _ShadowDistance: {x: 0.1, y: 100}
-  _ShadowPenumbra: 1
-  _AoStepsize: 2.57
+  _ShadowPenumbra: 128
+  _AoStepsize: 1.56
   _AoIterations: 4
-  _AoIntensity: 0.344
+  _AoIntensity: 0.433
   _useModInterval: 0
   _modInterval: {x: 4, y: 4, z: 4}
   _mainColor: {r: 0, g: 0.53182125, b: 1, a: 0}
-  _sphere: {x: 0, y: 0, z: 7, w: 3.5}
-  _sphereSmooth: 1.71
+  _sphere: {x: 6.36, y: 2.48, z: 0, w: 2.22}
+  _sphereSmooth: 2.2
   _degreeRotate: 45
 --- !u!114 &963194230
 MonoBehaviour:
