@@ -12,7 +12,7 @@ public class MyLineGraphManager : MonoBehaviour
 
     public void LoadData(List<float> fpsData)
     {
-
+        fpsData.RemoveAt(0);//Remove the first one make the graph readable
         int index = fpsData.Count;
         float highestValue = 0;
         for (int i = 0; i < index; i++)

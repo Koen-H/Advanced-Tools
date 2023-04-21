@@ -124,6 +124,7 @@ Shader "Hidden/RayMarchingTwo"
 
 
 			float distanceField(float3 p) {
+				return mandelbulbSDF(p, 2 ,10);
 				float result;
 				if (_useModInterval) {
 					if (_modInfinite) {
@@ -146,7 +147,7 @@ Shader "Hidden/RayMarchingTwo"
 					sphere = opUS(sphere, sphereAdd, _sphereSmooth);
 				}*/
 				//result = sdTorus(p, float2(1, 1));
-				result = sphere;
+				result = opSS(sphere,box1,_sphereSmooth);
 				return result; 
 				//
 				//return mandelbulbSDF(p,3,30);
