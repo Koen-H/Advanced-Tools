@@ -1168,14 +1168,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.12821975, y: -0, z: -0, w: 0.99174577}
-  m_LocalPosition: {x: 0, y: 0.567, z: -3.201}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 2, y: 0.011, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 14.733, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &963194229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1192,21 +1192,26 @@ MonoBehaviour:
   _maxDistance: 1000
   _MaxIterations: 1000
   _Accuracy: 0.001
+  _useLight: 1
   _directionalLight: {fileID: 705507995}
   _LightCol: {r: 1, g: 0.98431504, b: 0, a: 0}
   _LightIntensity: 1
+  _useShadow: 0
   _ShadowIntensity: 0.92
   _ShadowDistance: {x: 0.1, y: 100}
   _ShadowPenumbra: 128
+  _useAmbientOcclusion: 0
   _AoStepsize: 1.56
   _AoIterations: 4
   _AoIntensity: 0.433
-  _useModInterval: 0
-  _modInterval: {x: 4, y: 4, z: 4}
+  _useModInterval: 1
+  _modInfinite: 1
+  _modInterval: {x: 4, y: 4, z: 4, w: 1}
   _mainColor: {r: 0, g: 0.53182125, b: 1, a: 0}
-  _sphere: {x: 6.36, y: 2.48, z: 0, w: 2.22}
-  _sphereSmooth: 2.2
-  _degreeRotate: 45
+  _sphere: {x: 0, y: 1, z: 1, w: 1}
+  _sphereSmooth: 3.08
+  _degreeRotate: 43.71
+  _box1: {x: 0, y: 0, z: 1, w: 1}
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0

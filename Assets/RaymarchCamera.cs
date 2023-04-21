@@ -35,14 +35,16 @@ public class RaymarchCamera : SceneViewFilter
     public float _maxDistance;
     public int _MaxIterations;
     [Range(0.1f,0.001f)]
-    public float _Accuracy; 
+    public float _Accuracy;
 
     [Header("Directional Light")]
+    public bool _useLight;
     public Transform _directionalLight;
     public Color _LightCol;
     public float _LightIntensity;
 
     [Header("Shadow")]
+    public bool _useShadow;
     [Range(0, 4)]
     public float _ShadowIntensity;
     public Vector2 _ShadowDistance;
@@ -50,6 +52,7 @@ public class RaymarchCamera : SceneViewFilter
     public float _ShadowPenumbra;
 
     [Header("Ambient Occlusion")]
+    public bool _useAmbientOcclusion;
     [Range(0.01f, 10.0f)]
     public float _AoStepsize;
     [Range(1,5)]
@@ -59,7 +62,8 @@ public class RaymarchCamera : SceneViewFilter
 
     [Header("Mod Interval")]
     public bool _useModInterval;
-    public Vector3 _modInterval;
+    public bool _modInfinite;
+    public Vector4 _modInterval;
 
     [Header("Signed Distance Field")]
     //public Color _mainColor;
@@ -74,6 +78,7 @@ public class RaymarchCamera : SceneViewFilter
     public float _sphereSmooth;
     public float _degreeRotate;
 
+    public Vector4 _box1;
 
 
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
@@ -84,9 +89,11 @@ public class RaymarchCamera : SceneViewFilter
             return;
         }
 
+        _raymarchMat.SetInt("_useLight", _useLight ? 1 : 0);
         _raymarchMat.SetVector("_LightDir", _directionalLight ? _directionalLight.forward : Vector3.down);
         _raymarchMat.SetColor("_LightCol", _LightCol);
         _raymarchMat.SetFloat("_LightIntensity", _LightIntensity);
+        _raymarchMat.SetInt("_useShadow", _useShadow ? 1 : 0);
         _raymarchMat.SetFloat("_ShadowIntensity", _ShadowIntensity);
         _raymarchMat.SetVector("_ShadowDistance", _ShadowDistance);
         _raymarchMat.SetFloat("_ShadowPenumbra", _ShadowPenumbra);
@@ -96,7 +103,7 @@ public class RaymarchCamera : SceneViewFilter
         _raymarchMat.SetInt("_MaxIterations", _MaxIterations);
         _raymarchMat.SetFloat("_Accuracy", _Accuracy);
         //_raymarchMat.SetVector("_sphere1", _sphere1);
-        //_raymarchMaterial.SetVector("_box1", _box1);
+        _raymarchMaterial.SetVector("_box1", _box1);
         //_raymarchMat.SetFloat("_box1round", _box1round);
         //_raymarchMat.SetFloat("_boxSphereSmooth", _boxSphereSmooth);
         //_raymarchMat.SetVector("_sphere2", _sphere2);
@@ -109,11 +116,13 @@ public class RaymarchCamera : SceneViewFilter
 
         _raymarchMaterial.SetColor("_mainColor", _mainColor);
         _raymarchMaterial.SetInt("_useModInterval", _useModInterval ? 1 : 0);
+        _raymarchMaterial.SetInt("_modInfinite", _modInfinite ? 1 : 0);
         _raymarchMaterial.SetVector("_modInterval", _modInterval);
 
         _raymarchMat.SetFloat("_AoStepsize", _AoStepsize);
         _raymarchMat.SetFloat("_AoIntensity", _AoIntensity);
         _raymarchMat.SetInt("_AoIterations", _AoIterations);
+        _raymarchMat.SetInt("_useAmbientOcclusion", _useAmbientOcclusion ? 1 : 0);
 
         RenderTexture.active = destination;
 

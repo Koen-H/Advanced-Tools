@@ -32,16 +32,20 @@ Shader "Hidden/RayMarchingTwo"
 			//uniform float4 _sphere1, _sphere2, _box1;
 			//Mod interval
 			uniform int _useModInterval;
-			uniform float3 _modInterval;
+			uniform float4 _modInterval;
+			uniform int _modInfinite;
 
 			//Light
+			uniform int _useLight;
 			uniform float3 _LightDir, _LightCol;
 			uniform float _LightIntensity;
+			uniform int _useAmbientOcclusion;
 			
 			//Color
 			uniform fixed4 _mainColor;
 			
 			//Shadow
+			uniform int _useShadow;
 			uniform float2 _ShadowDistance;
 			uniform float _ShadowIntensity;
 			uniform float _ShadowPenumbra;
@@ -50,6 +54,8 @@ Shader "Hidden/RayMarchingTwo"
 			uniform float4 _sphere;
 			uniform float _sphereSmooth;
 			uniform float _degreeRotate;
+			
+			uniform float4 _box1;
 
 
 
@@ -97,24 +103,52 @@ Shader "Hidden/RayMarchingTwo"
 				return float3(cosY * v.x - sinY * v.z, v.y, sinY * v.x + cosY * v.z);
 			}
 
-			
 
+			float3 opRepLim(in float3 p, in float c, in float3 l)
+			{
+				float3 q = p - c * clamp(round(p / c), -l, l);
+				return q;
+			}
+
+			float3 opRep(in float3 p, in float3 c)
+			{
+				float3 q = fmod(p + 0.5 * c, c) - 0.5 * c;
+				return q;
+			}
+
+			float opDisplace(float3 p, float d1)
+			{
+				float d2 = displacement(p);
+				return d1 + d2;
+			}
 
 
 			float distanceField(float3 p) {
+				float result;
 				if (_useModInterval) {
-					float modX = pMod1(p.x, _modInterval.x);
-					float modY = pMod1(p.y, _modInterval.y);
-					float modZ = pMod1(p.z, _modInterval.z);
+					if (_modInfinite) {
+						float modX = pMod1(p.x, _modInterval.x);
+						float modY = pMod1(p.y, _modInterval.y);
+						float modZ = pMod1(p.z, _modInterval.z);
+					}
+					else {
+						p = opRepLim(p, _modInterval.w, _modInterval.xyz);
+					}
+					//p = opRep(p, _modInterval);
 				}
 				float ground = sdPlane(p, float4(0, 1, 0, 0));
-				float sphere = sdSphere(p - _sphere.xyz ,_sphere.w);
+				
+				float sphere = sdSphere(p - _sphere.xyz,_sphere.w);
+				float box1 = sdBox(p - _box1.xyz, _box1.w);
 
-				for (int i = 1; i < 8; i++) {
+				/*for (int i = 1; i < 8; i++) {
 					float sphereAdd = sdSphere(RotateY(p, _degreeRotate * i) - _sphere.xyz, _sphere.w);
 					sphere = opUS(sphere, sphereAdd, _sphereSmooth);
-				}
-				return opU(ground, sphere);
+				}*/
+				//result = sdTorus(p, float2(1, 1));
+				result = sphere;
+				return result; 
+				//
 				//return mandelbulbSDF(p,3,30);
 				//float boxSphere1 = BoxSphere(p);
 				//return opU(ground, boxSphere1);
@@ -184,13 +218,16 @@ Shader "Hidden/RayMarchingTwo"
 				shadow = max(0.0,pow(shadow, _ShadowIntensity));
 				//Ambient occlusion
 				float ao = AmbientOcclusion(p,n);
-
-
-				result = color * light * shadow * ao;
+				result = color;
+				if(_useLight) result *= light;
+				if(_useShadow) result *= shadow;
+				if(_useAmbientOcclusion) result *= ao;
+				//result = color * light * shadow * ao;
 
 				return result;
 
 			}
+
 
 			fixed4 raymarching(float3 ro, float3 rd, float depth)
 			{
@@ -227,7 +264,7 @@ Shader "Hidden/RayMarchingTwo"
 			fixed4 frag(v2f i) : SV_Target
 			{
 				float depth = LinearEyeDepth(tex2D(_CameraDepthTexture, i.uv).r);
-			depth *= length(i.ray);
+				depth *= length(i.ray);
 				fixed3 col = tex2D(_MainTex, i.uv);
 				float3 rayDirection = normalize(i.ray.xyz);
 				float3 rayOrigin = _WorldSpaceCameraPos;

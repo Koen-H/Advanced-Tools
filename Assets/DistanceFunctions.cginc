@@ -17,6 +17,12 @@ float sdPlane(float3 p, float4 n)
 	return dot(p, n.xyz) + n.w;
 }
 
+float sdTorus(float3 p, float2 t)
+{
+	float2 q = float2(length(p.xz) - t.x, p.y);
+	return length(q) - t.y;
+}
+
 // Box
 // b: size of box in x/y/z
 float sdBox(float3 p, float3 b)
@@ -116,4 +122,20 @@ float mandelbulbSDF(float3 p, float power, int iterations)
 		z += p;
 	}
 	return 0.5 * log(r) * r / dr;
+}
+
+
+float displacement(float3 p) {
+	float disp = sin(20.0 * p.x) * sin(20.0 * p.y) * sin(20.0 * p.z);
+	return disp;
+}
+
+float opTwist(in float3 p)
+{
+	const float k = 9; // or some other amount
+	float c = cos(k * p.y);
+	float s = sin(k * p.y);
+	float2x2 m = float2x2(c, -s, s, c);
+	float3 q = float3(mul(m, float2(p.xz)), p.y);
+	return sdBox(p, 1);;//Change the sdf
 }
