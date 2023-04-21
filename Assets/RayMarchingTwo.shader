@@ -207,22 +207,28 @@ Shader "Hidden/RayMarchingTwo"
 			}
 
 
-			float3 Shading(float3 p, float3 n) 
+			float3 Shading(float3 p, float3 n)
 			{
 				float3 result;
 				//Diffuse Color
 				float3 color = _mainColor.rgb;
-				//Directional Light
-				float3 light = (_LightCol * dot(-_LightDir, n) * 0.5 + 0.5) * _LightIntensity;
-				//Shadows
-				float shadow = softShadow(p, -_LightDir, _ShadowDistance.x, _ShadowDistance.y, _ShadowPenumbra) * 0.5 + 0.5;
-				shadow = max(0.0,pow(shadow, _ShadowIntensity));
-				//Ambient occlusion
-				float ao = AmbientOcclusion(p,n);
 				result = color;
-				if(_useLight) result *= light;
-				if(_useShadow) result *= shadow;
-				if(_useAmbientOcclusion) result *= ao;
+				//Directional Light
+				if (_useLight) {
+					float3 light = (_LightCol * dot(-_LightDir, n) * 0.5 + 0.5) * _LightIntensity;
+					result *= light;
+				}
+				//Shadows
+				if (_useShadow) {
+					float shadow = softShadow(p, -_LightDir, _ShadowDistance.x, _ShadowDistance.y, _ShadowPenumbra) * 0.5 + 0.5;
+					shadow = max(0.0, pow(shadow, _ShadowIntensity));
+					result *= shadow;
+				}
+				//Ambient occlusion
+				if (_useAmbientOcclusion){
+					float ao = AmbientOcclusion(p, n);
+					result *= ao;
+				}
 				//result = color * light * shadow * ao;
 
 				return result;

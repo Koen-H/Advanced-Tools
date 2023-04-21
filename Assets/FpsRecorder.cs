@@ -26,10 +26,12 @@ public class FpsRecorder : MonoBehaviour
     int frameCount = 0;
 
 
+    [Header("Graph settings")]
     [SerializeField] MyLineGraphManager myLineGraphManager;
+    [SerializeField] TextMesh iterationText;
+    [SerializeField] TextMesh dataInput;
     [SerializeField]
     List<float> fpsData = new();
-
 
 
     void Update()
@@ -65,6 +67,12 @@ public class FpsRecorder : MonoBehaviour
     void SetIterationData()
     {
         raymarchSettings._MaxIterations = currentIteration * iterationStepIncrement;
+        iterationText.text = $"Iterations (Increments of {iterationStepIncrement}) avg of {iterationTime} seconds";
+        string dataString = $"Max Distance {raymarchSettings._maxDistance}\n Accuracy {raymarchSettings._Accuracy}\n";
+        if (raymarchSettings._useLight) dataString += $"Using Light ({raymarchSettings._LightIntensity})\n";
+        if (raymarchSettings._useShadow) dataString += $"Using Shadown ({raymarchSettings._ShadowIntensity},{raymarchSettings._ShadowPenumbra})\n";
+        if (raymarchSettings._useAmbientOcclusion) dataString += $"Using Ambient Occ ({raymarchSettings._AoStepsize},{raymarchSettings._AoIterations},{raymarchSettings._AoIntensity})\n";
+        dataInput.text = dataString;
     }
 
 
