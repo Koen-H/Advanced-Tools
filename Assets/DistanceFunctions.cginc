@@ -1,4 +1,4 @@
-﻿//For signedDistance functions, I used this as my source:
+﻿//For signedDistance functions, I used this as my source and made it work in unity:
 // https://iquilezles.org/articles/distfunctions/
 
 

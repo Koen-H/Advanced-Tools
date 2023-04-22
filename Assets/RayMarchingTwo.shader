@@ -124,7 +124,7 @@ Shader "Hidden/RayMarchingTwo"
 
 
 			float distanceField(float3 p) {
-				return mandelbulbSDF(p, 2 ,10);
+				//return mandelbulbSDF(p, 2 ,10);
 				float result;
 				if (_useModInterval) {
 					if (_modInfinite) {

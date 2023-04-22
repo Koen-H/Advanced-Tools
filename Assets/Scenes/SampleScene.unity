@@ -315,7 +315,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1540014541}
-  m_RootOrder: 13
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &99468325
 PrefabInstance:
@@ -1049,12 +1049,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   raymarchSettings: {fileID: 963194229}
   iterations: 100
+  increaseModInterval: 0
   iterationStepIncrement: 1
-  iterationTime: 5
+  iterationTime: 1
   currentIteration: 0
+  graphTitle: Hollowed Cube, 10x10x10
   myLineGraphManager: {fileID: 1540014542}
   iterationText: {fileID: 321669544}
   dataInput: {fileID: 1778052902}
+  titelMesh: {fileID: 40566063}
   fpsData: []
 --- !u!114 &583063915
 MonoBehaviour:
@@ -1428,14 +1431,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 3.171}
+  m_LocalRotation: {x: 0, y: 0.5, z: 0, w: 0.8660254}
+  m_LocalPosition: {x: 0.43, y: 0, z: 2.54}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 60, z: 0}
 --- !u!114 &963194229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1452,21 +1455,21 @@ MonoBehaviour:
   _maxDistance: 10000
   _MaxIterations: 10000
   _Accuracy: 0.001
-  _useLight: 0
+  _useLight: 1
   _directionalLight: {fileID: 705507995}
   _LightCol: {r: 1, g: 0.98431504, b: 0, a: 0}
   _LightIntensity: 1
-  _useShadow: 0
+  _useShadow: 1
   _ShadowIntensity: 0.92
   _ShadowDistance: {x: 0.1, y: 100}
   _ShadowPenumbra: 128
-  _useAmbientOcclusion: 0
+  _useAmbientOcclusion: 1
   _AoStepsize: 0.01
   _AoIterations: 5
   _AoIntensity: 0.433
-  _useModInterval: 0
+  _useModInterval: 1
   _modInfinite: 0
-  _modInterval: {x: 10000, y: 10000, z: 10000, w: 2.88}
+  _modInterval: {x: 10, y: 10, z: 10, w: 2.88}
   _mainColor: {r: 0, g: 0.53182125, b: 1, a: 0}
   _sphere: {x: 0, y: 0, z: 0, w: 2.01}
   _sphereSmooth: 0.35
@@ -2138,9 +2141,9 @@ Transform:
   - {fileID: 1358380800}
   - {fileID: 1291801084}
   - {fileID: 40566062}
-  - {fileID: 96680684}
   - {fileID: 388213036}
   - {fileID: 99468326}
+  - {fileID: 96680684}
   - {fileID: 1852053487}
   - {fileID: 321669543}
   - {fileID: 403899130}
@@ -2169,8 +2172,6 @@ MonoBehaviour:
   - {fileID: 559581157}
   - {fileID: 1219712499}
   - {fileID: 1509750928}
-<<<<<<< Updated upstream
-=======
 --- !u!1 &1581216918
 GameObject:
   m_ObjectHideFlags: 0
@@ -2336,7 +2337,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
->>>>>>> Stashed changes
 --- !u!1 &1852053484
 GameObject:
   m_ObjectHideFlags: 0

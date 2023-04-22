@@ -9,9 +9,11 @@ public class FpsRecorder : MonoBehaviour
     [SerializeField]
     [Tooltip("How many iterations?")]
     int iterations = 1;
+    [SerializeField] bool increaseModInterval = false;
     [SerializeField]
     [Tooltip("By how much should the raymarchIteration increase?")]
     int iterationStepIncrement = 1;
+
     [SerializeField]
     [Tooltip("How long should one iteration take? and an average of fps be based of?")]
     public float iterationTime = 1.0f;
@@ -27,9 +29,11 @@ public class FpsRecorder : MonoBehaviour
 
 
     [Header("Graph settings")]
+    [SerializeField] string graphTitle;
     [SerializeField] MyLineGraphManager myLineGraphManager;
     [SerializeField] TextMesh iterationText;
     [SerializeField] TextMesh dataInput;
+    [SerializeField] TextMesh titelMesh;
     [SerializeField]
     List<float> fpsData = new();
 
@@ -66,13 +70,10 @@ public class FpsRecorder : MonoBehaviour
 
     void SetIterationData()
     {
-        raymarchSettings._MaxIterations = currentIteration * iterationStepIncrement;
-        iterationText.text = $"Iterations (Increments of {iterationStepIncrement}) avg of {iterationTime} seconds";
-        string dataString = $"Max Distance {raymarchSettings._maxDistance}\n Accuracy {raymarchSettings._Accuracy}\n";
-        if (raymarchSettings._useLight) dataString += $"Using Light ({raymarchSettings._LightIntensity})\n";
-        if (raymarchSettings._useShadow) dataString += $"Using Shadown ({raymarchSettings._ShadowIntensity},{raymarchSettings._ShadowPenumbra})\n";
-        if (raymarchSettings._useAmbientOcclusion) dataString += $"Using Ambient Occ ({raymarchSettings._AoStepsize},{raymarchSettings._AoIterations},{raymarchSettings._AoIntensity})\n";
-        dataInput.text = dataString;
+        int newVal = currentIteration * iterationStepIncrement;
+        if (increaseModInterval) raymarchSettings._modInterval = new Vector4(newVal, newVal, newVal, raymarchSettings._modInterval.w);
+        else raymarchSettings._MaxIterations = newVal;
+
     }
 
 
@@ -100,7 +101,14 @@ public class FpsRecorder : MonoBehaviour
         {
             isRecording = false;
             Debug.Log("Recording ended!");
-            myLineGraphManager.LoadData(fpsData);
+            titelMesh.text = graphTitle;
+            myLineGraphManager.LoadData(fpsData);        
+            iterationText.text = $"Iterations (Increments of {iterationStepIncrement}) avg of {iterationTime} seconds";
+            string dataString = $"Max Distance {raymarchSettings._maxDistance}\n Accuracy {raymarchSettings._Accuracy}\n";
+            if (raymarchSettings._useLight) dataString += $"Using Light ({raymarchSettings._LightIntensity})\n";
+            if (raymarchSettings._useShadow) dataString += $"Using Shadown ({raymarchSettings._ShadowIntensity},{raymarchSettings._ShadowPenumbra})\n";
+            if (raymarchSettings._useAmbientOcclusion) dataString += $"Using Ambient Occ ({raymarchSettings._AoStepsize},{raymarchSettings._AoIterations},{raymarchSettings._AoIntensity})\n";
+            dataInput.text = dataString;
         }
     }
 }
