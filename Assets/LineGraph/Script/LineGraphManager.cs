@@ -35,6 +35,9 @@ public class LineGraphManager : MonoBehaviour {
 	private float lrWidth = 0.1f;
 	private int dataGap = 0;
 
+	Coroutine corOne;
+	Coroutine corTwo;
+
 
 	void Start(){
 
@@ -67,9 +70,9 @@ public class LineGraphManager : MonoBehaviour {
 			gdlist[i].marbles = (gdlist[i].marbles/highestValue)*7;
 		}
 		if(playerNum == 1) 
-			StartCoroutine(BarGraphBlue(gdlist,gap));
-		else if(playerNum == 2) 
-			StartCoroutine(BarGraphGreen(gdlist,gap));
+			corOne = StartCoroutine(BarGraphBlue(gdlist,gap));
+		else if(playerNum == 2)
+            corTwo = StartCoroutine(BarGraphGreen(gdlist,gap));
 	}
 
 	public void AddPlayer1Data(int numOfStones){
@@ -155,6 +158,9 @@ public class LineGraphManager : MonoBehaviour {
 	public void ClearGraph(){
 		if(holder)
 			Destroy(holder);
+		if (corOne != null)StopCoroutine(corOne);
+		if (corTwo != null) StopCoroutine(corTwo);
+
 	}
 
 	int GetDataGap(int dataCount){

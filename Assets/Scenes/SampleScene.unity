@@ -1432,7 +1432,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0, y: 0.5, z: 0, w: 0.8660254}
-  m_LocalPosition: {x: 0.43, y: 0, z: 2.54}
+  m_LocalPosition: {x: 1.2, y: 0, z: 2.98}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1453,7 +1453,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _shader: {fileID: 4800000, guid: 683c9bd859b94904dafbb9ba57d66a7a, type: 3}
   _maxDistance: 10000
-  _MaxIterations: 10000
+  _MaxIterations: 10
   _Accuracy: 0.001
   _useLight: 1
   _directionalLight: {fileID: 705507995}
@@ -1468,11 +1468,11 @@ MonoBehaviour:
   _AoIterations: 5
   _AoIntensity: 0.433
   _useModInterval: 1
-  _modInfinite: 0
-  _modInterval: {x: 10, y: 10, z: 10, w: 2.88}
+  _modInfinite: 1
+  _modInterval: {x: 4, y: 4, z: 4, w: 4}
   _mainColor: {r: 0, g: 0.53182125, b: 1, a: 0}
-  _sphere: {x: 0, y: 0, z: 0, w: 2.01}
-  _sphereSmooth: 0.35
+  _sphere: {x: 0, y: 0, z: 0, w: 3.15}
+  _sphereSmooth: 0
   _degreeRotate: 0
   _box1: {x: 0, y: 0, z: 0, w: 2}
 --- !u!114 &963194231
@@ -1877,6 +1877,105 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1430360696
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1430360697}
+  - component: {fileID: 1430360699}
+  - component: {fileID: 1430360698}
+  m_Layer: 8
+  m_Name: removed Iter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1430360697
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1430360696}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.01, y: -0.63, z: 0}
+  m_LocalScale: {x: 0.1239176, y: 0.12391763, z: 0.12391763}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1540014541}
+  m_RootOrder: 20
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!102 &1430360698
+TextMesh:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1430360696}
+  m_Text: 'Removed first
+
+    10 iterations'
+  m_OffsetZ: 0
+  m_CharacterSize: 1
+  m_LineSpacing: 1
+  m_Anchor: 2
+  m_Alignment: 0
+  m_TabSize: 4
+  m_FontSize: 30
+  m_FontStyle: 0
+  m_RichText: 1
+  m_Font: {fileID: 12800000, guid: 0e3acf45d20a649fb998cc5bbc875a47, type: 3}
+  m_Color:
+    serializedVersion: 2
+    rgba: 4294967295
+--- !u!23 &1430360699
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1430360696}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 4294967295
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 0e3acf45d20a649fb998cc5bbc875a47, type: 3}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &1483149165
 GameObject:
   m_ObjectHideFlags: 0
@@ -2148,6 +2247,7 @@ Transform:
   - {fileID: 321669543}
   - {fileID: 403899130}
   - {fileID: 1778052901}
+  - {fileID: 1430360697}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2172,6 +2272,8 @@ MonoBehaviour:
   - {fileID: 559581157}
   - {fileID: 1219712499}
   - {fileID: 1509750928}
+  storedFPSData: []
+  zoomedInText: {fileID: 1430360698}
 --- !u!1 &1581216918
 GameObject:
   m_ObjectHideFlags: 0

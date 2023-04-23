@@ -139,3 +139,31 @@ float opTwist(in float3 p)
 	float3 q = float3(mul(m, float2(p.xz)), p.y);
 	return sdBox(p, 1);;//Change the sdf
 }
+
+
+
+float3 RotateY(float3 v, float degree) {
+	float rad = 0.0174532925 * degree;
+	float cosY = cos(rad);
+	float sinY = sin(rad);
+	return float3(cosY * v.x - sinY * v.z, v.y, sinY * v.x + cosY * v.z);
+}
+
+
+float3 opRepLim(in float3 p, in float c, in float3 l)
+{
+	float3 q = p - c * clamp(round(p / c), -l, l);
+	return q;
+}
+
+float3 opRep(in float3 p, in float3 c)
+{
+	float3 q = fmod(p + 0.5 * c, c) - 0.5 * c;
+	return q;
+}
+
+float opDisplace(float3 p, float d1)
+{
+	float d2 = displacement(p);
+	return d1 + d2;
+}

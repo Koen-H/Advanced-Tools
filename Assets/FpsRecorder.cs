@@ -41,9 +41,7 @@ public class FpsRecorder : MonoBehaviour
     void Update()
     {
         if (isRecording) Record();
-       // if (Input.GetKeyDown(KeyCode.P)) myLineGraphManager.LoadData(fpsData);
         if(Input.GetKeyDown(KeyCode.Space)) StartRecording();
-        // Change a value here (e.g., transform.position)
     }
     public float GetAverageFPS()
     {

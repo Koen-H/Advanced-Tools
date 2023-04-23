@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,19 +9,49 @@ public class MyLineGraphManager : MonoBehaviour
     [SerializeField] LineGraphManager lineGraphManager;
 
     [SerializeField] List<TextMesh> yPoints;
+    [SerializeField] List<float> storedFPSData;
+    [SerializeField] TextMesh zoomedInText;
 
+    int zoomedIN = 1;
 
-    public void LoadData(List<float> fpsData)
+    private void Update()
     {
-        fpsData.RemoveAt(0);//Remove the first one make the graph readable
+
+        if (Input.GetKeyDown(KeyCode.RightArrow)) ZoomGraph(1);
+        if (Input.GetKeyDown(KeyCode.LeftArrow)) ZoomGraph(-1);
+    }
+
+    void ZoomGraph(int inP) {
+
+        if (storedFPSData == null)
+        {
+            Debug.Log("There is no data recorded yet!");
+            return;
+        }
+        zoomedIN += inP;
+        if (zoomedIN < 0) zoomedIN = 0;
+        LoadData(storedFPSData, false);
+
+    }
+
+
+
+    public void LoadData(List<float> fpsData, bool newData = true)
+    {
+        if(newData) storedFPSData = fpsData;
+        zoomedInText.text = $"Removed first \n{zoomedIN} iterations";
+        lineGraphManager.graphDataPlayer1 = new List<GraphData>();
+        lineGraphManager.graphDataPlayer2 = new List<GraphData>();
         int index = fpsData.Count;
         float highestValue = 0;
         for (int i = 0; i < index; i++)
         {
+            if (i < zoomedIN) continue;
             GraphData gd = new GraphData();
             gd.marbles = fpsData[i];
             if (gd.marbles > highestValue) highestValue = gd.marbles;
             lineGraphManager.graphDataPlayer1.Add(gd);
+            
 
             GraphData gd2 = new GraphData();
             gd2.marbles = i;

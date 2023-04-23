@@ -87,45 +87,22 @@ Shader "Hidden/RayMarchingTwo"
 				return o;
 			}
 
-			//float BoxSphere(float3 p) {
-			//	float Sphere1 = sdSphere(p - _sphere1.xyz, _sphere1.w);
-			//	float Box1 = sdRoundBox(p - _box1.xyz, _box1.www, _box1round);
-			//	float combine1 = opSS(Sphere1, Box1, _boxSphereSmooth);
-			//	float Sphere2 = sdSphere(p - _sphere2.xyz, _sphere2.w);
-			//	float combine2 = opIS(Sphere2, combine1, _sphereIntersectSmooth);
-			//	return combine2;
-			//}
-
-			float3 RotateY(float3 v, float degree) {
-				float rad = 0.0174532925 * degree;
-				float cosY = cos(rad);
-				float sinY = sin(rad);
-				return float3(cosY * v.x - sinY * v.z, v.y, sinY * v.x + cosY * v.z);
+			float BoxSphere(float3 p) {
+				float Sphere1 = sdSphere(p - _sphere1.xyz, _sphere1.w);
+				float Box1 = sdRoundBox(p - _box1.xyz, _box1.www, _box1round);
+				float combine1 = opSS(Sphere1, Box1, _boxSphereSmooth);
+				float Sphere2 = sdSphere(p - _sphere2.xyz, _sphere2.w);
+				float combine2 = opIS(Sphere2, combine1, _sphereIntersectSmooth);
+				return combine2;
 			}
 
-
-			float3 opRepLim(in float3 p, in float c, in float3 l)
-			{
-				float3 q = p - c * clamp(round(p / c), -l, l);
-				return q;
-			}
-
-			float3 opRep(in float3 p, in float3 c)
-			{
-				float3 q = fmod(p + 0.5 * c, c) - 0.5 * c;
-				return q;
-			}
-
-			float opDisplace(float3 p, float d1)
-			{
-				float d2 = displacement(p);
-				return d1 + d2;
-			}
+			
 
 
 			float distanceField(float3 p) {
 				//return mandelbulbSDF(p, 2 ,10);
 				float result;
+				float ground = sdPlane(p, float4(0, 1, 0, 0));
 				if (_useModInterval) {
 					if (_modInfinite) {
 						float modX = pMod1(p.x, _modInterval.x);
@@ -135,24 +112,23 @@ Shader "Hidden/RayMarchingTwo"
 					else {
 						p = opRepLim(p, _modInterval.w, _modInterval.xyz);
 					}
-					//p = opRep(p, _modInterval);
 				}
-				float ground = sdPlane(p, float4(0, 1, 0, 0));
-				
-				float sphere = sdSphere(p - _sphere.xyz,_sphere.w);
+				float sphere = sdSphere(p - _sphere.xyz, _sphere.w);
 				float box1 = sdBox(p - _box1.xyz, _box1.w);
-
-				/*for (int i = 1; i < 8; i++) {
+				result = opSS(sphere, box1, _sphereSmooth);
+				//result = sdTorus(p - _sphere.xyz, float2(_sphere.w, 0.1));
+				//result = sdBox(p - _box1.xyz, _box1.w);
+				//float prism = sdHexPrism(p - _sphere.xyz, float2(1, _sphere.w));
+				/* //Create 8 spheres, and place them in a circle
+				for (int i = 1; i < 8; i++) {
 					float sphereAdd = sdSphere(RotateY(p, _degreeRotate * i) - _sphere.xyz, _sphere.w);
 					sphere = opUS(sphere, sphereAdd, _sphereSmooth);
 				}*/
 				//result = sdTorus(p, float2(1, 1));
-				result = opSS(sphere,box1,_sphereSmooth);
-				return result; 
-				//
-				//return mandelbulbSDF(p,3,30);
+				//result = opIS(prism,box1,_sphereSmooth);
 				//float boxSphere1 = BoxSphere(p);
-				//return opU(ground, boxSphere1);
+				//result = opU(ground, boxSphere1);
+				return result; 
 			}
 
 			float3 getNormal(float3 p) {
