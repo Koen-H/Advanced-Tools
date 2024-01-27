@@ -87,14 +87,14 @@ Shader "Hidden/RayMarchingTwo"
 				return o;
 			}
 
-			float BoxSphere(float3 p) {
-				float Sphere1 = sdSphere(p - _sphere1.xyz, _sphere1.w);
-				float Box1 = sdRoundBox(p - _box1.xyz, _box1.www, _box1round);
-				float combine1 = opSS(Sphere1, Box1, _boxSphereSmooth);
-				float Sphere2 = sdSphere(p - _sphere2.xyz, _sphere2.w);
-				float combine2 = opIS(Sphere2, combine1, _sphereIntersectSmooth);
-				return combine2;
-			}
+			//float BoxSphere(float3 p) {
+			//	float Sphere1 = sdSphere(p - _sphere1.xyz, _sphere1.w);
+			//	float Box1 = sdRoundBox(p - _box1.xyz, _box1.www, _box1round);
+			//	float combine1 = opSS(Sphere1, Box1, _boxSphereSmooth);
+			//	float Sphere2 = sdSphere(p - _sphere2.xyz, _sphere2.w);
+			//	float combine2 = opIS(Sphere2, combine1, _sphereIntersectSmooth);
+			//	return combine2;
+			//}
 
 			
 

@@ -1453,25 +1453,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _shader: {fileID: 4800000, guid: 683c9bd859b94904dafbb9ba57d66a7a, type: 3}
   _maxDistance: 10000
-  _MaxIterations: 10
+  _MaxIterations: 10000
   _Accuracy: 0.001
   _useLight: 1
   _directionalLight: {fileID: 705507995}
   _LightCol: {r: 1, g: 0.98431504, b: 0, a: 0}
-  _LightIntensity: 1
+  _LightIntensity: 0.56
   _useShadow: 1
   _ShadowIntensity: 0.92
   _ShadowDistance: {x: 0.1, y: 100}
   _ShadowPenumbra: 128
-  _useAmbientOcclusion: 1
+  _useAmbientOcclusion: 0
   _AoStepsize: 0.01
   _AoIterations: 5
   _AoIntensity: 0.433
   _useModInterval: 1
   _modInfinite: 1
-  _modInterval: {x: 4, y: 4, z: 4, w: 4}
+  _modInterval: {x: 10.77, y: 8.92, z: 0.67, w: 4}
   _mainColor: {r: 0, g: 0.53182125, b: 1, a: 0}
-  _sphere: {x: 0, y: 0, z: 0, w: 3.15}
+  _sphere: {x: 0, y: 0, z: -0.29, w: 2.76}
   _sphereSmooth: 0
   _degreeRotate: 0
   _box1: {x: 0, y: 0, z: 0, w: 2}
